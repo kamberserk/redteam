@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: auto; /* Enable scrolling */
+        }
+        .iframe-container {
+            display: flex;
+            flex-direction: column; /* Stack iframes vertically */
+            width: 100%;
+        }
+        iframe {
+            width: 100%;
+            border: none;
+            flex-shrink: 0; /* Prevent iframes from shrinking */
+        }
+        #iframe1, #iframe2, #iframe3 {
+            height: 100vh; /* Full viewport height for all frames */
+        }
+    </style>
+</head>
+<body>
+    <div class="iframe-container">
+        <iframe id="iframe1" src="team_report_stats.html" title="Stats Report"></iframe>
+        <iframe id="iframe2" src="team_report_players.html" title="Players Report"></iframe>
+        <iframe id="iframe3" src="youtube.html" title="YouTube Video"></iframe>
+    </div>
+</body>
+</html>
+

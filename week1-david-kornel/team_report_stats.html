@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basketball Team Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: #fff;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .column {
+            flex: 1;
+            min-width: 200px;
+        }
+        .section {
+            border: 1px solid #000;
+            padding: 10px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+            cursor: pointer; /* Indicate that cells are clickable */
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        th#narrow {
+            width: 60px;
+        }
+        th#points, th#attempts {
+            width: 80px;
+        }
+        th#name {
+            width: 200px;
+        }
+        .highlight-green {
+            background-color: lightgreen;
+        }
+        .highlight-red {
+            background-color: lightcoral;
+        }
+        .highlight-default {
+            background-color: #fff;
+        }
+    </style>
+    <script>
+        // Function to handle color change
+        function toggleColor(cell) {
+            const currentClass = cell.className;
+            if (currentClass === 'highlight-green') {
+                cell.className = 'highlight-red';
+            } else if (currentClass === 'highlight-red') {
+                cell.className = 'highlight-default';
+            } else {
+                cell.className = 'highlight-green';
+            }
+            saveColors();
+        }
+
+        // Function to save colors to local storage
+        function saveColors() {
+            const colorData = {};
+            document.querySelectorAll('td[data-row-id]').forEach(cell => {
+                const rowId = cell.getAttribute('data-row-id');
+                colorData[rowId] = cell.className;
+            });
+            localStorage.setItem('playerColors', JSON.stringify(colorData));
+        }
+
+        // Function to load colors from local storage
+        function loadColors() {
+            const colorData = JSON.parse(localStorage.getItem('playerColors') || '{}');
+            document.querySelectorAll('td[data-row-id]').forEach(cell => {
+                const rowId = cell.getAttribute('data-row-id');
+                if (colorData[rowId]) {
+                    cell.className = colorData[rowId];
+                }
+            });
+        }
+
+        // Load colors on page load
+        window.onload = loadColors;
+    </script>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Team Report</h1>
+    </div>
+
+    <div class="container">
+        <!-- First row for Starting Five, Inactive Players, Bench, 3-Point Shooters, and FT Shooters -->
+        <div class="row">
+            <!-- Column 1: Starting Five and Inactive Players stacked -->
+            <div class="column">
+                <div id="starters-section" class="section">
+                    <h2>Last Game Starting Five</h2>
+                    <table>
+                        <tr><th id="narrow">#</th><th id="name">Player</th><th id="points">Points</th></tr>
+
+                        <tr>
+                            <td data-row-id="starters-4-jersey" onclick="toggleColor(this)">4</td>
+                            <td data-row-id="starters-4-name" onclick="toggleColor(this)">SIMON Benedek</td>
+                            <td data-row-id="starters-4-points" onclick="toggleColor(this)">25</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="starters-1-jersey" onclick="toggleColor(this)">1</td>
+                            <td data-row-id="starters-1-name" onclick="toggleColor(this)">KIS Attila Raul</td>
+                            <td data-row-id="starters-1-points" onclick="toggleColor(this)">16</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="starters-14-jersey" onclick="toggleColor(this)">14</td>
+                            <td data-row-id="starters-14-name" onclick="toggleColor(this)">KELLER Vidor</td>
+                            <td data-row-id="starters-14-points" onclick="toggleColor(this)">15</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="starters-10-jersey" onclick="toggleColor(this)">10</td>
+                            <td data-row-id="starters-10-name" onclick="toggleColor(this)">KUTTOR Gergő</td>
+                            <td data-row-id="starters-10-points" onclick="toggleColor(this)">10</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="starters-11-jersey" onclick="toggleColor(this)">11</td>
+                            <td data-row-id="starters-11-name" onclick="toggleColor(this)">TóTH Péter</td>
+                            <td data-row-id="starters-11-points" onclick="toggleColor(this)">7</td>
+                        </tr>
+    
+                    </table>
+                </div>
+                
+                <div id="inactive-players-section" class="section">
+                    <h2>Inactive Players</h2>
+                    <table>
+                        <tr><th id="narrow">#</th><th id="name">Player</th></tr>
+
+                        <tr>
+                            <td data-row-id="inactive-12-jersey" onclick="toggleColor(this)">12</td>
+                            <td data-row-id="inactive-12-name" onclick="toggleColor(this)">HEGEDüS Kornél</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="inactive-15-jersey" onclick="toggleColor(this)">15</td>
+                            <td data-row-id="inactive-15-name" onclick="toggleColor(this)">DENK Marcell Botond</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="inactive-16-jersey" onclick="toggleColor(this)">16</td>
+                            <td data-row-id="inactive-16-name" onclick="toggleColor(this)">JáNNI Ákos</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="inactive-19-jersey" onclick="toggleColor(this)">19</td>
+                            <td data-row-id="inactive-19-name" onclick="toggleColor(this)">DENK Norbert Zalán</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="inactive-3-jersey" onclick="toggleColor(this)">3</td>
+                            <td data-row-id="inactive-3-name" onclick="toggleColor(this)">SZALCZGRUBER Zsolt</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="inactive-5-jersey" onclick="toggleColor(this)">5</td>
+                            <td data-row-id="inactive-5-name" onclick="toggleColor(this)">SZABó Zsolt András</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="inactive-6-jersey" onclick="toggleColor(this)">6</td>
+                            <td data-row-id="inactive-6-name" onclick="toggleColor(this)">VINCZ Botond</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="inactive-8-jersey" onclick="toggleColor(this)">8</td>
+                            <td data-row-id="inactive-8-name" onclick="toggleColor(this)">BARTHALOS András</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="inactive-9-jersey" onclick="toggleColor(this)">9</td>
+                            <td data-row-id="inactive-9-name" onclick="toggleColor(this)">SOMOGYFOKI Péter Gábor</td>
+                        </tr>
+    
+                    </table>
+                </div>
+            </div>
+
+            <!-- Column 2: Bench -->
+            <div class="column">
+                <div id="bench-section" class="section">
+                    <h2>Bench</h2>
+                    <table>
+                        <tr><th id="narrow">#</th><th id="name">Player</th><th id="points">Points</th></tr>
+
+                        <tr>
+                            <td data-row-id="bench-13-jersey" onclick="toggleColor(this)">13</td>
+                            <td data-row-id="bench-13-name" onclick="toggleColor(this)">SOMOGYFOKI Szabolcs Gábor</td>
+                            <td data-row-id="bench-13-points" onclick="toggleColor(this)">14</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="bench-17-jersey" onclick="toggleColor(this)">17</td>
+                            <td data-row-id="bench-17-name" onclick="toggleColor(this)">MOLNáR Dániel</td>
+                            <td data-row-id="bench-17-points" onclick="toggleColor(this)">13</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="bench-2-jersey" onclick="toggleColor(this)">2</td>
+                            <td data-row-id="bench-2-name" onclick="toggleColor(this)">SZALCZGRUBER Ádám</td>
+                            <td data-row-id="bench-2-points" onclick="toggleColor(this)">12</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="bench-7-jersey" onclick="toggleColor(this)">7</td>
+                            <td data-row-id="bench-7-name" onclick="toggleColor(this)">BüKI Bence</td>
+                            <td data-row-id="bench-7-points" onclick="toggleColor(this)">2</td>
+                        </tr>
+    
+                    </table>
+                </div>
+            </div>
+
+            <!-- Column 3: 3-Point Shooters -->
+            <div class="column">
+                <div id="three-pointers-section" class="section">
+                    <h2>3-Point Shooters</h2>
+                    <table>
+                        <tr><th id="narrow">#</th><th id="name">Player</th><th>3P%</th><th id="attempts">3PA</th></tr>
+
+                        <tr>
+                            <td data-row-id="three_pointers-16-jersey" onclick="toggleColor(this)">16</td>
+                            <td data-row-id="three_pointers-16-name" onclick="toggleColor(this)">JáNNI Ákos</td>
+                            <td data-row-id="three_pointers-16-3p" onclick="toggleColor(this)">50.0</td>
+                            <td data-row-id="three_pointers-16-3pa" onclick="toggleColor(this)">2.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-3-jersey" onclick="toggleColor(this)">3</td>
+                            <td data-row-id="three_pointers-3-name" onclick="toggleColor(this)">SZALCZGRUBER Zsolt</td>
+                            <td data-row-id="three_pointers-3-3p" onclick="toggleColor(this)">50.0</td>
+                            <td data-row-id="three_pointers-3-3pa" onclick="toggleColor(this)">0.5</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-4-jersey" onclick="toggleColor(this)">4</td>
+                            <td data-row-id="three_pointers-4-name" onclick="toggleColor(this)">SIMON Benedek</td>
+                            <td data-row-id="three_pointers-4-3p" onclick="toggleColor(this)">37.0</td>
+                            <td data-row-id="three_pointers-4-3pa" onclick="toggleColor(this)">5.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-19-jersey" onclick="toggleColor(this)">19</td>
+                            <td data-row-id="three_pointers-19-name" onclick="toggleColor(this)">DENK Norbert Zalán</td>
+                            <td data-row-id="three_pointers-19-3p" onclick="toggleColor(this)">36.0</td>
+                            <td data-row-id="three_pointers-19-3pa" onclick="toggleColor(this)">1.2</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-17-jersey" onclick="toggleColor(this)">17</td>
+                            <td data-row-id="three_pointers-17-name" onclick="toggleColor(this)">MOLNáR Dániel</td>
+                            <td data-row-id="three_pointers-17-3p" onclick="toggleColor(this)">34.0</td>
+                            <td data-row-id="three_pointers-17-3pa" onclick="toggleColor(this)">5.9</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-1-jersey" onclick="toggleColor(this)">1</td>
+                            <td data-row-id="three_pointers-1-name" onclick="toggleColor(this)">KIS Attila Raul</td>
+                            <td data-row-id="three_pointers-1-3p" onclick="toggleColor(this)">34.0</td>
+                            <td data-row-id="three_pointers-1-3pa" onclick="toggleColor(this)">4.3</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-11-jersey" onclick="toggleColor(this)">11</td>
+                            <td data-row-id="three_pointers-11-name" onclick="toggleColor(this)">TóTH Péter</td>
+                            <td data-row-id="three_pointers-11-3p" onclick="toggleColor(this)">34.0</td>
+                            <td data-row-id="three_pointers-11-3pa" onclick="toggleColor(this)">3.8</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-5-jersey" onclick="toggleColor(this)">5</td>
+                            <td data-row-id="three_pointers-5-name" onclick="toggleColor(this)">SZABó Zsolt András</td>
+                            <td data-row-id="three_pointers-5-3p" onclick="toggleColor(this)">34.0</td>
+                            <td data-row-id="three_pointers-5-3pa" onclick="toggleColor(this)">3.5</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-7-jersey" onclick="toggleColor(this)">7</td>
+                            <td data-row-id="three_pointers-7-name" onclick="toggleColor(this)">BüKI Bence</td>
+                            <td data-row-id="three_pointers-7-3p" onclick="toggleColor(this)">32.0</td>
+                            <td data-row-id="three_pointers-7-3pa" onclick="toggleColor(this)">3.6</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-9-jersey" onclick="toggleColor(this)">9</td>
+                            <td data-row-id="three_pointers-9-name" onclick="toggleColor(this)">SOMOGYFOKI Péter Gábor</td>
+                            <td data-row-id="three_pointers-9-3p" onclick="toggleColor(this)">26.0</td>
+                            <td data-row-id="three_pointers-9-3pa" onclick="toggleColor(this)">2.6</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-2-jersey" onclick="toggleColor(this)">2</td>
+                            <td data-row-id="three_pointers-2-name" onclick="toggleColor(this)">SZALCZGRUBER Ádám</td>
+                            <td data-row-id="three_pointers-2-3p" onclick="toggleColor(this)">22.0</td>
+                            <td data-row-id="three_pointers-2-3pa" onclick="toggleColor(this)">3.5</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-10-jersey" onclick="toggleColor(this)">10</td>
+                            <td data-row-id="three_pointers-10-name" onclick="toggleColor(this)">KUTTOR Gergő</td>
+                            <td data-row-id="three_pointers-10-3p" onclick="toggleColor(this)">21.0</td>
+                            <td data-row-id="three_pointers-10-3pa" onclick="toggleColor(this)">1.8</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-13-jersey" onclick="toggleColor(this)">13</td>
+                            <td data-row-id="three_pointers-13-name" onclick="toggleColor(this)">SOMOGYFOKI Szabolcs Gábor</td>
+                            <td data-row-id="three_pointers-13-3p" onclick="toggleColor(this)">14.0</td>
+                            <td data-row-id="three_pointers-13-3pa" onclick="toggleColor(this)">0.7</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-12-jersey" onclick="toggleColor(this)">12</td>
+                            <td data-row-id="three_pointers-12-name" onclick="toggleColor(this)">HEGEDüS Kornél</td>
+                            <td data-row-id="three_pointers-12-3p" onclick="toggleColor(this)">8.0</td>
+                            <td data-row-id="three_pointers-12-3pa" onclick="toggleColor(this)">2.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-15-jersey" onclick="toggleColor(this)">15</td>
+                            <td data-row-id="three_pointers-15-name" onclick="toggleColor(this)">DENK Marcell Botond</td>
+                            <td data-row-id="three_pointers-15-3p" onclick="toggleColor(this)">0.0</td>
+                            <td data-row-id="three_pointers-15-3pa" onclick="toggleColor(this)">0.3</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="three_pointers-14-jersey" onclick="toggleColor(this)">14</td>
+                            <td data-row-id="three_pointers-14-name" onclick="toggleColor(this)">KELLER Vidor</td>
+                            <td data-row-id="three_pointers-14-3p" onclick="toggleColor(this)">0.0</td>
+                            <td data-row-id="three_pointers-14-3pa" onclick="toggleColor(this)">0.0</td>
+                        </tr>
+    
+                    </table>
+                </div>
+            </div>
+
+            <!-- Column 4: Free Throw Shooters -->
+            <div class="column">
+                <div id="free-throws-section" class="section">
+                    <h2>Free Throw Shooters</h2>
+                    <table>
+                        <tr><th id="narrow">#</th><th id="name">Player</th><th>FT%</th><th id="attempts">Σ(FTA)</th></tr>
+
+                        <tr>
+                            <td data-row-id="free_throws-3-jersey" onclick="toggleColor(this)">3</td>
+                            <td data-row-id="free_throws-3-name" onclick="toggleColor(this)">SZALCZGRUBER Zsolt</td>
+                            <td data-row-id="free_throws-3-ft" onclick="toggleColor(this)">0.0</td>
+                            <td data-row-id="free_throws-3-fta" onclick="toggleColor(this)">2.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-12-jersey" onclick="toggleColor(this)">12</td>
+                            <td data-row-id="free_throws-12-name" onclick="toggleColor(this)">HEGEDüS Kornél</td>
+                            <td data-row-id="free_throws-12-ft" onclick="toggleColor(this)">0.0</td>
+                            <td data-row-id="free_throws-12-fta" onclick="toggleColor(this)">0.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-15-jersey" onclick="toggleColor(this)">15</td>
+                            <td data-row-id="free_throws-15-name" onclick="toggleColor(this)">DENK Marcell Botond</td>
+                            <td data-row-id="free_throws-15-ft" onclick="toggleColor(this)">0.0</td>
+                            <td data-row-id="free_throws-15-fta" onclick="toggleColor(this)">0.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-16-jersey" onclick="toggleColor(this)">16</td>
+                            <td data-row-id="free_throws-16-name" onclick="toggleColor(this)">JáNNI Ákos</td>
+                            <td data-row-id="free_throws-16-ft" onclick="toggleColor(this)">0.0</td>
+                            <td data-row-id="free_throws-16-fta" onclick="toggleColor(this)">0.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-17-jersey" onclick="toggleColor(this)">17</td>
+                            <td data-row-id="free_throws-17-name" onclick="toggleColor(this)">MOLNáR Dániel</td>
+                            <td data-row-id="free_throws-17-ft" onclick="toggleColor(this)">50.0</td>
+                            <td data-row-id="free_throws-17-fta" onclick="toggleColor(this)">40.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-11-jersey" onclick="toggleColor(this)">11</td>
+                            <td data-row-id="free_throws-11-name" onclick="toggleColor(this)">TóTH Péter</td>
+                            <td data-row-id="free_throws-11-ft" onclick="toggleColor(this)">56.0</td>
+                            <td data-row-id="free_throws-11-fta" onclick="toggleColor(this)">16.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-14-jersey" onclick="toggleColor(this)">14</td>
+                            <td data-row-id="free_throws-14-name" onclick="toggleColor(this)">KELLER Vidor</td>
+                            <td data-row-id="free_throws-14-ft" onclick="toggleColor(this)">56.0</td>
+                            <td data-row-id="free_throws-14-fta" onclick="toggleColor(this)">36.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-10-jersey" onclick="toggleColor(this)">10</td>
+                            <td data-row-id="free_throws-10-name" onclick="toggleColor(this)">KUTTOR Gergő</td>
+                            <td data-row-id="free_throws-10-ft" onclick="toggleColor(this)">57.0</td>
+                            <td data-row-id="free_throws-10-fta" onclick="toggleColor(this)">30.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-19-jersey" onclick="toggleColor(this)">19</td>
+                            <td data-row-id="free_throws-19-name" onclick="toggleColor(this)">DENK Norbert Zalán</td>
+                            <td data-row-id="free_throws-19-ft" onclick="toggleColor(this)">60.0</td>
+                            <td data-row-id="free_throws-19-fta" onclick="toggleColor(this)">5.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-1-jersey" onclick="toggleColor(this)">1</td>
+                            <td data-row-id="free_throws-1-name" onclick="toggleColor(this)">KIS Attila Raul</td>
+                            <td data-row-id="free_throws-1-ft" onclick="toggleColor(this)">64.0</td>
+                            <td data-row-id="free_throws-1-fta" onclick="toggleColor(this)">78.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-2-jersey" onclick="toggleColor(this)">2</td>
+                            <td data-row-id="free_throws-2-name" onclick="toggleColor(this)">SZALCZGRUBER Ádám</td>
+                            <td data-row-id="free_throws-2-ft" onclick="toggleColor(this)">65.0</td>
+                            <td data-row-id="free_throws-2-fta" onclick="toggleColor(this)">31.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-9-jersey" onclick="toggleColor(this)">9</td>
+                            <td data-row-id="free_throws-9-name" onclick="toggleColor(this)">SOMOGYFOKI Péter Gábor</td>
+                            <td data-row-id="free_throws-9-ft" onclick="toggleColor(this)">67.0</td>
+                            <td data-row-id="free_throws-9-fta" onclick="toggleColor(this)">42.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-4-jersey" onclick="toggleColor(this)">4</td>
+                            <td data-row-id="free_throws-4-name" onclick="toggleColor(this)">SIMON Benedek</td>
+                            <td data-row-id="free_throws-4-ft" onclick="toggleColor(this)">71.0</td>
+                            <td data-row-id="free_throws-4-fta" onclick="toggleColor(this)">38.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-5-jersey" onclick="toggleColor(this)">5</td>
+                            <td data-row-id="free_throws-5-name" onclick="toggleColor(this)">SZABó Zsolt András</td>
+                            <td data-row-id="free_throws-5-ft" onclick="toggleColor(this)">75.0</td>
+                            <td data-row-id="free_throws-5-fta" onclick="toggleColor(this)">72.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-13-jersey" onclick="toggleColor(this)">13</td>
+                            <td data-row-id="free_throws-13-name" onclick="toggleColor(this)">SOMOGYFOKI Szabolcs Gábor</td>
+                            <td data-row-id="free_throws-13-ft" onclick="toggleColor(this)">79.0</td>
+                            <td data-row-id="free_throws-13-fta" onclick="toggleColor(this)">14.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="free_throws-7-jersey" onclick="toggleColor(this)">7</td>
+                            <td data-row-id="free_throws-7-name" onclick="toggleColor(this)">BüKI Bence</td>
+                            <td data-row-id="free_throws-7-ft" onclick="toggleColor(this)">89.0</td>
+                            <td data-row-id="free_throws-7-fta" onclick="toggleColor(this)">19.0</td>
+                        </tr>
+    
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second row for Key Stats, Offensive Stats, and Defensive Stats -->
+        <div class="row">
+            <!-- Column 1: Key Stats -->
+            <div class="column">
+                <div id="key-stats-section" class="section">
+                    <h2>Key Stats</h2>
+                    <table>
+                        <tr><th>Rank</th><th>Type</th><th>Value</th></tr>
+
+                        <tr>
+                            <td data-row-id="key_stats-17-rank" onclick="toggleColor(this)">17th</td>
+                            <td data-row-id="key_stats-17-type" onclick="toggleColor(this)">defensiveRating</td>
+                            <td data-row-id="key_stats-17-value" onclick="toggleColor(this)">69.7</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="key_stats-2-rank" onclick="toggleColor(this)">2nd</td>
+                            <td data-row-id="key_stats-2-type" onclick="toggleColor(this)">offensiveRating</td>
+                            <td data-row-id="key_stats-2-value" onclick="toggleColor(this)">91.6</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="key_stats-2-rank" onclick="toggleColor(this)">2nd</td>
+                            <td data-row-id="key_stats-2-type" onclick="toggleColor(this)">points</td>
+                            <td data-row-id="key_stats-2-value" onclick="toggleColor(this)">87.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="key_stats-1-rank" onclick="toggleColor(this)">1st</td>
+                            <td data-row-id="key_stats-1-type" onclick="toggleColor(this)">assistsToTurnovers</td>
+                            <td data-row-id="key_stats-1-value" onclick="toggleColor(this)">1.7</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="key_stats-6-rank" onclick="toggleColor(this)">6th</td>
+                            <td data-row-id="key_stats-6-type" onclick="toggleColor(this)">possessions</td>
+                            <td data-row-id="key_stats-6-value" onclick="toggleColor(this)">95.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="key_stats-4-rank" onclick="toggleColor(this)">4th</td>
+                            <td data-row-id="key_stats-4-type" onclick="toggleColor(this)">pointsPerPossession</td>
+                            <td data-row-id="key_stats-4-value" onclick="toggleColor(this)">0.92</td>
+                        </tr>
+    
+                    </table>
+                </div>
+            </div>
+
+            <!-- Column 2: Offensive Stats -->
+            <div class="column">
+                <div id="offensive-stats-section" class="section">
+                    <h2>Offensive Stats</h2>
+                    <table>
+                        <tr><th>Rank</th><th>Type</th><th>Value</th></tr>
+
+                        <tr>
+                            <td data-row-id="offensive_stats-2-rank" onclick="toggleColor(this)">2nd</td>
+                            <td data-row-id="offensive_stats-2-type" onclick="toggleColor(this)">points</td>
+                            <td data-row-id="offensive_stats-2-value" onclick="toggleColor(this)">87.0</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="offensive_stats-1-rank" onclick="toggleColor(this)">1st</td>
+                            <td data-row-id="offensive_stats-1-type" onclick="toggleColor(this)">offensiveRebounds</td>
+                            <td data-row-id="offensive_stats-1-value" onclick="toggleColor(this)">12.9</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="offensive_stats-1-rank" onclick="toggleColor(this)">1st</td>
+                            <td data-row-id="offensive_stats-1-type" onclick="toggleColor(this)">assists</td>
+                            <td data-row-id="offensive_stats-1-value" onclick="toggleColor(this)">23.6</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="offensive_stats-6-rank" onclick="toggleColor(this)">6th</td>
+                            <td data-row-id="offensive_stats-6-type" onclick="toggleColor(this)">3PA</td>
+                            <td data-row-id="offensive_stats-6-value" onclick="toggleColor(this)">30.2</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="offensive_stats-5-rank" onclick="toggleColor(this)">5th</td>
+                            <td data-row-id="offensive_stats-5-type" onclick="toggleColor(this)">3P%</td>
+                            <td data-row-id="offensive_stats-5-value" onclick="toggleColor(this)">31.3</td>
+                        </tr>
+    
+                    </table>
+                </div>
+            </div>
+
+            <!-- Column 3: Defensive Stats -->
+            <div class="column">
+                <div id="defensive-stats-section" class="section">
+                    <h2>Defensive Stats</h2>
+                    <table>
+                        <tr><th>Rank</th><th>Type</th><th>Value</th></tr>
+
+                        <tr>
+                            <td data-row-id="defensive_stats-1-rank" onclick="toggleColor(this)">1st</td>
+                            <td data-row-id="defensive_stats-1-type" onclick="toggleColor(this)">defensiveRebounds</td>
+                            <td data-row-id="defensive_stats-1-value" onclick="toggleColor(this)">29.6</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="defensive_stats-2-rank" onclick="toggleColor(this)">2nd</td>
+                            <td data-row-id="defensive_stats-2-type" onclick="toggleColor(this)">steals</td>
+                            <td data-row-id="defensive_stats-2-value" onclick="toggleColor(this)">11.3</td>
+                        </tr>
+    
+                        <tr>
+                            <td data-row-id="defensive_stats-4-rank" onclick="toggleColor(this)">4th</td>
+                            <td data-row-id="defensive_stats-4-type" onclick="toggleColor(this)">blocks</td>
+                            <td data-row-id="defensive_stats-4-value" onclick="toggleColor(this)">2.3</td>
+                        </tr>
+    
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
