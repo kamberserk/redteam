@@ -12,6 +12,15 @@ All the data is scraped thru hunbasket.hu site and i create the sql (create and 
 First part is the java execution part : 
 
 Only you need to give the team name (Instat name) and the URL in the hunbasket.hu website you want to scrap
+
+public static final String teamURL = "https://hunbasket.hu/csapat/x2324/hun2b/10575/david-kornel-ka";
+	public static final String TEAMNAME="David Kornel";
+		
+	public static final String SQLFILE2 = "/Users/kam/Desktop/sql.txt";
+	public static final String SQLFILE = "/Users/kam/Desktop/sql_end.txt";
+
+
+
 from the URL find the players , get the player average and total stats and relative stats , and then finds the games the players played and get the stats for those games 
 We can find the starting five , missing players for that game etc....
 
