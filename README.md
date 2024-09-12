@@ -29,6 +29,10 @@ and then we get an export of an Excel file from Instat including many team wise 
 Second part is the python html part 
 we simply move the sqllite database and create the html files with a python , at the moment , we can put local information , but i think we need to put them into db as well (i will work on that part later ) 
 
+by running generate_report_players and stats python scripts simply you are generating the team_report_players.html and team_report_stats.html files. when you make your video and upload to youtube , you can simply change the youtube.html file embedding the video. The index.html is a frame that containing those 3 files so you see them in single page. 
+
+export is test for pdf export of the html file. That might be handy if we want handout prints for our players. Not complete though.
+
 so the player will see something like 
 
 Last game information , who to be careful on 3p , who to faul if needed.
